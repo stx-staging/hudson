@@ -1,3 +1,5 @@
+# depends on extra plugins: telegram-notifications
+
 node('master') {
   // in this array we'll place the jobs that we wish to run
   def devices = [];
