@@ -1,8 +1,9 @@
 # takes parameters: device, buildtype, statix_build_type, and repopick
 def BUILD_TREE = "/home/buildbot/stx-caf"
 node {
-      telegramSend 'Job link: $BUILD_URL';
       stage('Sync') {
+        telegramSend 'Started build of $DEVICE $BUILDTYPE';
+        telegramSend 'Job link: $BUILD_URL';
     	sh '''#!/bin/bash
 		cd '''+BUILD_TREE+'''
 		. venv/bin/activate
