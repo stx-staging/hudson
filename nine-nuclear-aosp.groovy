@@ -1,7 +1,8 @@
 # takes string parameters: device, buildtype, statix_build_type, and repopick
 def BUILD_TREE = "/home/buildbot/stx-aosp"
-node('master') {
+node {
       stage('Sync') {
+        telegramSend 'Starting build of $DEVICE $BUILDTYPE'
         telegramSend 'Job link: $BUILD_URL';
 	    sh '''#!/bin/bash
 		cd '''+BUILD_TREE+'''
