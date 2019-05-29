@@ -2,6 +2,7 @@
 
 node('master') {
   // in this array we'll place the jobs that we wish to run
+  def branches = [:];
   def devices = [];
   stage('Preparation') { // for display purposes
     def url = "https://raw.githubusercontent.com/stx-staging/hudson/master/statix-jenkins-devices".toURL();
@@ -19,13 +20,17 @@ node('master') {
         def buildtype = device[1];
         def statix_buildtype = device[2];
         def jobname = device[3];
-        telegramSend 'started build job for "${codename}"-"${buildtype}"';
-        build job: "${jobname}", parameters: [
-          string(name:'DEVICE', value:"${codename}"),
-          string(name:'BUILDTYPE', value: "${buildtype}"),
-          string(name:'STATIX_BUILD_TYPE', value: "${statix_buildtype}"),
-          string(name: 'REPOPICK', value: "1724 1725 1726 1727 1728")]
+        branches["${codename}"] = {
+            build job: "${jobname}", parameters: [
+                string(name:'DEVICE', value:"${codename}"),
+                string(name:'BUILDTYPE', value: "${buildtype}"),
+                string(name:'STATIX_BUILD_TYPE', value: "${statix_buildtype}"),
+                string(name:'REPOPICK', value: "")]
+        }
       }
     }
+  }
+  stage('Building') {
+    parallel branches
   }
 }
