@@ -39,9 +39,8 @@ node {
   stage('Upload') {
       	sh '''#!/bin/bash
       	set -e
-		cd '''+BUILD_TREE+'''
 		echo "Deploying artifacts..."
-		~/gdrive upload '''+BUILD_TREE+'''/out/target/product/*/statix_$DEVICE-*-$STATIX_BUILD_TYPE.zip
+		rsync --progress -a --include "statix_$DEVICE-*-$STATIX_BUILD_TYPE.zip" --exclude "*" $OUT_DIR_COMMON_BASE/stx-aosp/target/product/$DEVICE/ anayw2001@storage.osdn.net:/storage/groups/s/st/statixos/$DEVICE/9/
 		'''
 		telegramSend 'Build uploaded!';
 		sh '''#!/bin/bash
